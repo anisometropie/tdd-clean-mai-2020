@@ -1,3 +1,9 @@
+OBJECTIF : 
+
+HomeRoom veut permettre à ses utilisateurs de lister tous les appartements recensés dans notre agence 
+de sorte à pouvoir choisir l'habitat de ses rêves. 
+Il pourra demander une visite pour l'appartement de son choix.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

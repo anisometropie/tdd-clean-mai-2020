@@ -1,3 +1,5 @@
+import {checkForPalindrom} from "./palindrom";
+
 describe('Palindrom checker', () => {
     it('should check whether a string is a palindrom', () => {
 
@@ -11,11 +13,3 @@ describe('Palindrom checker', () => {
     });
 
 });
-
-const checkForPalindrom = (str: string) =>
-    str.split('').reduce((acc, s, i) =>
-        acc && areSymmetricalCharactersEqual(str, i), true);
-
-const areSymmetricalCharactersEqual = (str: string, i: number) => {
-    return str.charAt(i) === str.charAt(str.length - 1 - i);
-};
