@@ -1,13 +1,13 @@
 import {Store} from 'redux'
 import {InMemoryAgencyGateway} from '../../adapters/secondary/InMemoryAgencyGateway'
-import {AppState} from '../store/AppState'
-import {createReduxStore} from '../store/reduxStore'
+import {AppState} from '../../store/AppState'
+import {createReduxStore} from '../../store/reduxStore'
 import {Building} from "../models/Building.interface";
 import {Actions} from "./actionCreators";
 
 describe('Buildings retrieval', () => {
 
-    let store: Store<AppState>;
+    let store: Store<AppState, Actions>;
     let agencyGateway: InMemoryAgencyGateway;
     let initialState: AppState;
     const PARIS = 'PARIS';
@@ -32,7 +32,7 @@ describe('Buildings retrieval', () => {
         const fochBuilding = {id: '123abc', address: '4 avenue Foch 75008 Paris'};
 
         beforeEach(() => {
-            agencyGateway.buildings = new Map([[PARIS, fochBuilding]])
+            agencyGateway.buildings = new Map([[PARIS, [fochBuilding]]])
         });
 
         it('should retrieve one building', () => {

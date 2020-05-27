@@ -1,4 +1,4 @@
-import { Building } from '../models/Building.interface'
+import { Building } from '../corelogic/models/Building.interface'
 
 export interface AppState {
   // coreLogic: {
