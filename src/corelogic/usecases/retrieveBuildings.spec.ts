@@ -1,40 +1,57 @@
-import { createStore, Store } from 'redux'
-import { InMemoryAgencyGateway } from '../../adapters/secondary/InMemoryAgencyGateway'
-import { AppState } from '../store/AppState'
-import { buildingsReducer } from '../store/buildings.reducer'
-import { createReduxStore } from '../store/reduxStore'
+import {Store} from 'redux'
+import {InMemoryAgencyGateway} from '../../adapters/secondary/InMemoryAgencyGateway'
+import {AppState} from '../store/AppState'
+import {createReduxStore} from '../store/reduxStore'
+import {Building} from "../models/Building.interface";
+import {Actions} from "./actionCreators";
 
 describe('Buildings retrieval', () => {
-  it('should retrieve zero building if there is no building available', () => {
-    // GIVEN
-    const store: Store<AppState> = createStore((state = { buildings: [] }, action) => {
-      return state
+
+    let store: Store<AppState>;
+    let agencyGateway: InMemoryAgencyGateway;
+    let initialState: AppState;
+    const PARIS = 'PARIS';
+
+    beforeEach(() => {
+        agencyGateway = new InMemoryAgencyGateway()
+        store = createReduxStore({agencyGateway})
+        initialState = store.getState();
+    });
+
+    describe('No building available', () => {
+
+        it('should retrieve zero building', () => {
+            retrieveBuildings(PARIS);
+            expectBuildingsState({buildings: []});
+        })
+
+    });
+
+    describe('Some buildings available', () => {
+
+        const fochBuilding = {id: '123abc', address: '4 avenue Foch 75008 Paris'};
+
+        beforeEach(() => {
+            agencyGateway.buildings = new Map([[PARIS, fochBuilding]])
+        });
+
+        it('should retrieve one building', () => {
+            retrieveBuildings(PARIS);
+            expectBuildingsState({buildings: [fochBuilding]});
+        });
+
     })
 
-    // WHEN
-    store.dispatch({
-      type: 'RETRIEVE_BUILDINGS',
-      payload: { cityName: 'Paris' }
-    })
+    const retrieveBuildings = (cityName: string) => {
+        store.dispatch(Actions.retrieveBuildings(cityName));
+    };
 
-    // THEN
-    expect(store.getState()).toEqual({ buildings: [] })
-  })
+    const expectBuildingsState = (buildingsState: { buildings: Building[] }) => {
+        expect(store.getState()).toEqual({
+            ...initialState,
+            ...buildingsState
+        })
+    };
 
-  it('should retrieve one building', () => {
-    // GIVEN
-    const agencyGateway: InMemoryAgencyGateway = new InMemoryAgencyGateway()
-    const store: Store<AppState> = createReduxStore({ agencyGateway })
 
-    agencyGateway.buildings = new Map([['Paris', { id: '123abc', address: '4 avenue Foch 75008 Paris' }]])
-
-    // WHEN
-    store.dispatch({
-      type: 'RETRIEVE_BUILDINGS',
-      payload: { cityName: 'Paris' }
-    })
-
-    // THEN
-    expect(store.getState()).toEqual({ buildings: [{ id: '123abc', address: '4 avenue Foch 75008 Paris' }] })
-  })
 })
