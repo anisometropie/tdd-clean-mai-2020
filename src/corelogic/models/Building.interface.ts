@@ -1,4 +1,4 @@
 export interface Building {
-  id: string;
-  address: string;
+  id: string
+  address: string
 }
